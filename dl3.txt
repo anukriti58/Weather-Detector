@@ -1,0 +1,62 @@
+const int pingPin = 8;
+const int echoPin = 9; 
+#include <LiquidCrystal.h>
+LiquidCrystal lcd(2,3,4,5,6,7);
+
+long microsecondsToCentimeters(long microseconds) {
+   return microseconds / 29 / 2;
+}
+
+void setup() {
+  pinMode(10,OUTPUT);
+  pinMode(11,OUTPUT);
+  pinMode(12,OUTPUT);
+  pinMode(13,OUTPUT);
+  lcd.begin(16,2);  
+  lcd.setCursor(0,0);
+  lcd.print("WELCOME");
+  lcd.setCursor(0,1);
+  lcd.print("20UEC077");
+  delay(1000);
+  lcd.clear();
+}
+
+void loop() {
+   long duration, cm;
+   pinMode(pingPin, OUTPUT);
+   digitalWrite(pingPin, LOW);
+   delayMicroseconds(2);
+   digitalWrite(pingPin, HIGH);
+   delayMicroseconds(10);
+   digitalWrite(pingPin, LOW);
+   pinMode(echoPin, INPUT);
+   duration = pulseIn(echoPin, HIGH);
+   cm = microsecondsToCentimeters(duration);
+   lcd.print(cm);
+   lcd.print("cm");
+   delay(100);
+   digitalWrite(10,LOW);
+   digitalWrite(11,LOW);
+   digitalWrite(12,LOW);
+   digitalWrite(13,LOW);
+   delay(100);
+   if(cm>1000){
+      digitalWrite(10,HIGH);
+   }else if(cm>600 && cm<1000){
+      digitalWrite(10,HIGH);
+      digitalWrite(11,HIGH);
+   }else if(cm>300 && cm<600){
+      digitalWrite(10,HIGH);
+      digitalWrite(11,HIGH);
+      digitalWrite(12,HIGH);
+   }else if(cm<300){
+      digitalWrite(10,HIGH);
+      digitalWrite(11,HIGH);
+      digitalWrite(12,HIGH);
+      digitalWrite(13,HIGH);
+      lcd.setCursor(0,1);
+      lcd.print("WARNING");
+   }
+   delay(100);
+   lcd.clear();
+}
